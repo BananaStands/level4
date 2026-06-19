@@ -1,78 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500;600&display=swap');
+/* ── Global resets & shared rules ──────────────────────────────────────────
+   Almost all styling lives inline on the components (it ports the original
+   design 1:1). This file only holds what inline styles can't express:
+   keyframes, reveal-on-scroll transitions, hover states, and media queries. */
 
-:root {
-  --l4-ink: #f2f3f0;
-  --l4-muted: rgba(242, 243, 240, 0.64);
-  --l4-green: #3fe38e;
-  --l4-deep: #0a0c0b;
-  --l4-card: #111713;
+html, body { margin: 0; padding: 0; background: #0A0C0B; }
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+::selection { background: #3FE38E; color: #0A0C0B; }
+
+/* reveal-on-scroll (toggled by JS adding [data-anim] to the root and
+   [data-reveal="in"] to each element as it enters the viewport) */
+[data-anim] [data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .9s cubic-bezier(.16,.6,.18,1), transform .9s cubic-bezier(.16,.6,.18,1);
 }
+[data-anim] [data-reveal="in"] { opacity: 1; transform: translateY(0); }
 
-* {
-  box-sizing: border-box;
+@keyframes l4pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes l4marquee { to { transform: translateX(-50%); } }
+@keyframes l4timerbar { from { width: 100%; } to { width: 0%; } }
+@keyframes l4pop { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes l4shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes l4breathe { 0%, 100% { opacity: .5; transform: scale(1); } 50% { opacity: .9; transform: scale(1.06); } }
+
+/* answer buttons in the demo game */
+.l4opt:not([data-done]):hover { transform: translateY(-3px); border-color: #117A4A !important; box-shadow: 0 14px 30px rgba(17,122,74,.22) !important; }
+.l4opt:not([data-done]):active { transform: translateY(-1px) scale(.99); }
+
+input[type="range"] { accent-color: #3FE38E; height: 32px; cursor: pointer; }
+
+/* hover states (replacing the original inline style-hover attributes) */
+.l4-navlink { transition: color .2s ease; }
+.l4-navlink:hover { color: #3FE38E !important; }
+.l4-btn-mint:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(63,227,142,.35); }
+.l4-btn-mint-lg:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(63,227,142,.4); }
+.l4-btn-ghost:hover { border-color: #3FE38E !important; background: rgba(63,227,142,.08) !important; }
+.l4-card:hover { border-color: rgba(63,227,142,.45) !important; transform: translateY(-6px); }
+.l4-contact:hover { border-color: rgba(63,227,142,.5) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  [data-anim] [data-reveal] { opacity: 1; transform: none; }
 }
-
-html {
-  scroll-behavior: smooth;
-  background: var(--l4-deep);
-}
-
-body {
-  margin: 0;
-  color: var(--l4-ink);
-  background: radial-gradient(circle at 50% 0%, #163924 0%, var(--l4-deep) 42%, #050605 100%);
-  font-family: 'Archivo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input,
-textarea {
-  font: inherit;
-}
-
-::selection {
-  background: var(--l4-green);
-  color: #06100a;
-}
-
-@keyframes floatPhone {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50% { transform: translateY(-18px) rotate(1deg); }
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.08); }
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.l4-phone {
-  animation: floatPhone 6s ease-in-out infinite;
-}
-
-.l4-glow {
-  animation: glowPulse 5s ease-in-out infinite;
-}
-
-.l4-marquee {
-  animation: marquee 26s linear infinite;
-}
-
-.l4opt:hover {
-  transform: translateY(-2px);
-}
-
 @media (max-width: 760px) {
-  .l4-hide-mobile {
-    display: none !important;
-  }
+  [data-nav-links] { display: none !important; }
+}
+
+/* Small phones: full-width, easy-to-tap hero buttons */
+@media (max-width: 600px) {
+  #top .l4-btn-mint-lg,
+  #top .l4-btn-ghost { flex: 1 1 100%; text-align: center; }
 }
